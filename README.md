@@ -119,15 +119,11 @@ java -Ddw.prestoCoordinator=http://presto-coordinator-url.com \
 
 Airpal Version | Presto Versions Tested
 ---------------|-----------------------
-0.1            | 0.77, 0.87, 0.145
+0.1            | 0.157
 
 ## In the Wild
 Organizations and projects using `airpal` can list themselves [here](INTHEWILD.md).
 
 ## Contributors
 
-- Andy Kramolisch [@andykram](https://github.com/andykram)
-- Harry Shoff [@hshoff](https://github.com/hshoff)
-- Josh Perez [@goatslacker](https://github.com/goatslacker)
-- Spike Brehm [@spikebrehm](https://github.com/spikebrehm)
-- Stefan Vermaas [@stefanvermaas](https://github.com/stefanvermaas)
+- Swaranga Sarma [@swaranga](https://github.com/swaranga)
