@@ -81,7 +81,7 @@ public class Table
             columns.add(c.getName());
         }
 
-        return new Table(input.getConnectorId(), input.getSchema(), input.getTable(), columns);
+        return new Table(input.getConnectorId().getCatalogName(), input.getSchema(), input.getTable(), columns);
     }
 
     @JsonProperty("fqn")
