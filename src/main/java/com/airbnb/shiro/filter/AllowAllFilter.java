@@ -37,7 +37,16 @@ public class AllowAllFilter
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception
     {
         log.info("createToken called");
-        return new AllowAllToken(request.getRemoteHost(), true, "anonymous", ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
+        
+        Enumeration<String> paramNames=request.getParameterNames();
+        for(;paramNames.hasMoreElements();)
+        {
+          String paramName=(String)paramNames.nextElement();
+          log.info("createToken called=============paramname===="+paramName);
+          projectid= request.getParameter(paramName);
+          log.info("createToken called=============param value===="+projectid);
+        }
+        return new AllowAllToken(request.getRemoteHost(), true, projectid , ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
     }
 
     @Override

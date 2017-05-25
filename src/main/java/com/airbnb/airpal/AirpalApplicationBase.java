@@ -113,7 +113,12 @@ public abstract class AirpalApplicationBase<T extends AirpalConfiguration>
                 .addServlet("updates", injector.getInstance(SSEEventSourceServlet.class));
         sseServlet.setAsyncSupported(true);
         sseServlet.addMapping("/api/updates/subscribe");
-
+/*
+        ServletRegistration.Dynamic airpalServlet = environment.servlets()
+                .addServlet("api", injector.getInstance(AirpalServlet.class));
+        sseServlet.setAsyncSupported(true);
+        sseServlet.addMapping("/api/*");
+*/
         // Disable GZIP content encoding for SSE endpoints
         environment.lifecycle().addServerLifecycleListener(server -> {
             for (Handler handler : server.getChildHandlersByClass(BiDiGzipHandler.class)) {
