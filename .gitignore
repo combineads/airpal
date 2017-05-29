@@ -28,3 +28,4 @@ src/main/resources/assets/build/*
 
 # Airpal configuration
 reference.yml
+/.nb-gradle/
