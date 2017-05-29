@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +28,7 @@ public class AllowAllFilter
         extends AuthenticatingFilter
 {
     public static final String JSESSIONID = "JSESSIONID";
-
+    static String  projectid;
     @Setter
     private List<UserGroup> groups = Collections.emptyList();
 
@@ -38,7 +39,15 @@ public class AllowAllFilter
     {
         log.info("createToken called");
         
-        return new AllowAllToken(request.getRemoteHost(), true, "anonymous" , ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
+        Enumeration<String> paramNames=request.getParameterNames();
+        for(;paramNames.hasMoreElements();)
+        {
+          String paramName=(String)paramNames.nextElement();
+          log.info("createToken called=============paramname===="+paramName);
+          projectid= request.getParameter(paramName);
+          log.info("createToken called=============param value===="+projectid);
+         }
+         return new AllowAllToken(request.getRemoteHost(), true, projectid , ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
     }
 
     @Override
