@@ -1,9 +1,9 @@
 package com.airbnb.airpal.resources;
 
 import com.airbnb.airpal.core.AirpalUser;
+import com.airbnb.airpal.core.AirpalUserImpl;
 import com.airbnb.airpal.core.AuthorizationUtil;
 import lombok.Value;
-import com.airbnb.airpal.core.AirpalUserImpl;
 import org.secnod.shiro.jaxrs.Auth;
 
 import javax.ws.rs.GET;
@@ -16,23 +16,40 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource
 {
-@GET
-    public Response getUserInfo()
-    {
-      AirpalUser user = new AirpalUserImpl("admin@kth.se", "airpal", null, null, null);
-        if (user == null) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        } else {
-            return Response.ok(
-                    new UserInfo(
-                            user.getUserName(),
-                            new ExecutionPermissions(true,
-//                                    AuthorizationUtil.isAuthorizedWrite(user, "hive", "airpal", "any"),
-                                    true,
-                                    user.getAccessLevel())
-            )).build();
-        }
+
+  @GET
+  public Response getUserInfo(@Auth AirpalUser user) {
+    if (user == null) {
+      return Response.status(Response.Status.FORBIDDEN).build();
+    } else {
+      return Response.ok(
+        new UserInfo(
+          user.getUserName(),
+          new ExecutionPermissions(
+            AuthorizationUtil.isAuthorizedWrite(user, "hive", "airpal", "any"),
+            true,
+            user.getAccessLevel())
+        )).build();
     }
+  }
+    
+//    @GET
+//    public Response getUserInfo()
+//    {
+//      AirpalUser user = new AirpalUserImpl("admin@kth.se", "airpal", null, null, null);
+//        if (user == null) {
+//            return Response.status(Response.Status.FORBIDDEN).build();
+//        } else {
+//            return Response.ok(
+//                    new UserInfo(
+//                            user.getUserName(),
+//                            new ExecutionPermissions(true,
+////                                    AuthorizationUtil.isAuthorizedWrite(user, "hive", "airpal", "any"),
+//                                    true,
+//                                    user.getAccessLevel())
+//            )).build();
+//        }
+//    }
 
     @Value
     private static class UserInfo
