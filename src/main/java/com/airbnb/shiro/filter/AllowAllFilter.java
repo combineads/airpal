@@ -38,15 +38,7 @@ public class AllowAllFilter
     {
         log.info("createToken called");
         
-        Enumeration<String> paramNames=request.getParameterNames();
-        for(;paramNames.hasMoreElements();)
-        {
-          String paramName=(String)paramNames.nextElement();
-          log.info("createToken called=============paramname===="+paramName);
-          projectid= request.getParameter(paramName);
-          log.info("createToken called=============param value===="+projectid);
-        }
-        return new AllowAllToken(request.getRemoteHost(), true, projectid , ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
+        return new AllowAllToken(request.getRemoteHost(), true, "anonymous" , ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
     }
 
     @Override
