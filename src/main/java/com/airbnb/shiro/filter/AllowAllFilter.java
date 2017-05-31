@@ -28,7 +28,9 @@ public class AllowAllFilter
         extends AuthenticatingFilter
 {
     public static final String JSESSIONID = "JSESSIONID";
-    static String  projectid;
+    static String  projectattr;
+    String email;
+    String projid;
     @Setter
     private List<UserGroup> groups = Collections.emptyList();
 
@@ -44,10 +46,14 @@ public class AllowAllFilter
         {
           String paramName=(String)paramNames.nextElement();
           log.info("createToken called=============paramname===="+paramName);
-          projectid= request.getParameter(paramName);
-          log.info("createToken called=============param value===="+projectid);
+          projectattr= request.getParameter(paramName);
+          String[]  attr= projectattr.split("_");
+          email= attr[0];
+          projid= attr[1];
+          log.info("createToken called=============param value===="+email);
+          log.info("createToken called=============param value===="+projid);
          }
-         return new AllowAllToken(request.getRemoteHost(), true, projectid , ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
+         return new AllowAllToken(request.getRemoteHost(), true, email, ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
     }
 
     @Override
