@@ -48,8 +48,8 @@ public class AllowAllFilter
           log.info("createToken called=============paramname===="+paramName);
           projectattr= request.getParameter(paramName);
           String[]  attr= projectattr.split("_");
-          email= attr[0];
-          projid= attr[1];
+          projid= attr[0];
+          email= attr[1];
           log.info("createToken called=============param value===="+email);
           log.info("createToken called=============param value===="+projid);
          }
