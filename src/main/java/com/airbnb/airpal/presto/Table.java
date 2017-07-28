@@ -28,10 +28,14 @@ public class Table
 {
     private static Splitter TABLE_PART_SPLITTER = Splitter.on(".").omitEmptyStrings().trimResults();
     private static Joiner TABLE_PART_JOINER = Joiner.on(".").skipNulls();
-
+    
+    @JsonProperty
     private final String connectorId;
+    @JsonProperty
     private final String schema;
+    @JsonProperty
     private final String table;
+    @JsonProperty
     @StoredAsJson
     private final ImmutableList<String> columns;
 

@@ -11,6 +11,8 @@ import com.airbnb.airpal.sql.dao.JobDAO;
 import com.airbnb.airpal.sql.dao.JobOutputDAO;
 import com.airbnb.airpal.sql.dao.JobTableDAO;
 import com.airbnb.airpal.sql.dao.TableDAO;
+import com.facebook.presto.client.ClientTypeSignatureParameter;
+import com.facebook.presto.client.Column;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -151,13 +153,32 @@ public class JobHistoryStoreDAO
     @Override
     public void addRun(Job job)
     {
+        log.info("job history Dao=======inside addrun()========"+job.getQueryStarted().toString());
         JobDAO jobDAO = dbi.onDemand(JobDAO.class);
         TableDAO tableDAO = dbi.onDemand(TableDAO.class);
         JobTableDAO jobTableDAO = dbi.onDemand(JobTableDAO.class);
         JobOutputDAO jobOutputDAO = dbi.onDemand(JobOutputDAO.class);
 
         // Create the job
+        log.info("job history Dao=======job========"+job.getQuery()+job.getColumns());
+//        if(job.getColumns() != null) {
+//          for(Column col :job.getColumns()  ){
+//           
+//            if(col.getTypeSignature().getArguments() != null ){
+////              for(ClientTypeSignatureParameter clntTypeSign : col.getTypeSignature().getArguments()){
+////                log.info("job type signature=Arguments==clntTypeSign====job========"+clntTypeSign);
+////                 log.info("job type signature=Arguments==getKind====job========"+clntTypeSign.getKind());
+////                  log.info("job type signature=Arguments==getNamedTypeSignature====job========"+clntTypeSign.getNamedTypeSignature());
+////                   log.info("job type signature=Arguments==getTypeSignature====job========"+clntTypeSign.getTypeSignature());
+////              }
+//            
+//            
+//            }
+//          }
+//        }
+          
         long jobId = jobDAO.createJob(job);
+        
         // Find all presto tables already represented
         Set<TableRow> tablesInDb = Collections.emptySet();
         if (job.getTablesUsed().size() > 0) {

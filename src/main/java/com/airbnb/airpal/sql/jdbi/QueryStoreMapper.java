@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
+import com.fasterxml.jackson.databind.MapperFeature;
 
 import java.io.IOException;
 import java.sql.ResultSet;

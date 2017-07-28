@@ -23,13 +23,15 @@ public class SSEEventSource implements EventSource
     public void onOpen(Emitter emitter)
             throws IOException
     {
+        log.info("-----------open connection-----------");
         this.emitter = checkNotNull(emitter, "emitter was null");
     }
 
     @Override
     public void onClose()
-    {
-        jobUpdateToSSERelay.removeListener(this);
+    { 
+      log.info("-----------close connection-----------");
+      jobUpdateToSSERelay.removeListener(this);
         this.emitter = null;
     }
 
@@ -37,6 +39,7 @@ public class SSEEventSource implements EventSource
     {
         if (emitter != null) {
             try {
+                 log.info("-----------send message last-----------");
                 emitter.data(message);
             }
             catch (IOException e) {

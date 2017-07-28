@@ -71,8 +71,10 @@ public class QueryInfoClient
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class BasicQueryInfo
-    {
+    {   
+        @JsonProperty
         private final QueryStats queryStats;
+        @JsonProperty
         private final Set<Input> inputs;
 
         @JsonCreator

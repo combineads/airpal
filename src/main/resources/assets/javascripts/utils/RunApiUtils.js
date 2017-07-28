@@ -18,7 +18,7 @@ export default {
   },
 
   fetchHistory() {
-    return xhr('./api/query/history').then(checkResults);
+    return xhr(`/api/query/history`).then(checkResults);
   },
 
   kill(uuid) {

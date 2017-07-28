@@ -35,7 +35,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Path("/api/query")
 public class QueryResource
 {
@@ -77,14 +79,17 @@ public class QueryResource
                 .description(description)
                 .name(name)
                 .query(query);
+        log.info("saved query === user======"+user);
+        log.info("saved query === user======"+user.getUserName());
         if (user != null) {
             SavedQuery savedQuery = createFeaturedQueryRequest.user(user.getUserName())
                     .build();
-
+              log.info("saved query === issssssssssss======"+savedQuery.getName());
             if (queryStore.saveQuery((UserSavedQuery) savedQuery)) {
                 return Response.ok(savedQuery.getUuid()).build();
             }
             else {
+                log.info("response not found in 1st level:::::::::::");
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
         }

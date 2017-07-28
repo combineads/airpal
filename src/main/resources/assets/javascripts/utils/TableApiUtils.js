@@ -33,6 +33,6 @@ export default {
   },
 
   fetchTables() {
-    return xhr('/api/table?query=a');
+    return xhr(`/api/table?query=a`);
   }
 };

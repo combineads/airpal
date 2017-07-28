@@ -140,8 +140,21 @@ public class ColumnCache
                     if (results.getData() != null) {
                         for (List<Object> row : results.getData()) {
                             Column column = new Column((String) row.get(0), (String) row.get(1), new ClientTypeSignature(TypeSignature.parseTypeSignature((String)row.get(1))));
-                            boolean isNullable = (Boolean) row.get(2);
-                            boolean isPartition = (Boolean) row.get(3);
+                            log.info("============column cache called==================");
+                           log.info("row.get 2 values "+row.get(2));
+                            boolean isNullable = false;// (Boolean) row.get(2);
+                            boolean isPartition = "Partition Key".equals(row.get(2));
+//                            boolean isNullable = false;
+//                            if( row.get(2) instanceof Boolean){
+//                              
+//                             isNullable = (Boolean) row.get(2);
+//                            }
+//                            
+//                             boolean isPartition = false;
+//                            if(row.size() > 3){
+//                              log.info("row.get 3 values "+row.get(3));
+//                               isPartition = (Boolean) row.get(3);
+//                            }                           
 
                             cache.add(HiveColumn.fromColumn(column, isNullable, isPartition));
                         }

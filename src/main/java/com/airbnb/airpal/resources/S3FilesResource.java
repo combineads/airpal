@@ -38,7 +38,7 @@ public class S3FilesResource
 
     private String getOutputKey(String fileBaseName)
     {
-        return "airpal/" + fileBaseName;
+        return "airpal1/" + fileBaseName;
     }
 
     @GET

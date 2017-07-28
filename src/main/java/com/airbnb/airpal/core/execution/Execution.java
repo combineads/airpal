@@ -185,7 +185,8 @@ public class Execution implements Callable<Job>
                                 "Output file exceeded maximum configured filesize",
                                 e);
                     }
-
+                    
+                    log.info("===== activejobstore ======== rlUpdateJobInfo calling=======");
                     rlUpdateJobInfo(tables, resultColumns, queryStats, jobState, queryError, outputPreview);
 
                     return null;
@@ -239,6 +240,7 @@ public class Execution implements Callable<Job>
             List<List<Object>> outputPreview)
     {
         if (updateLimiter.tryAcquire(1)) {
+            log.info("===== testing activejobstore ======== rlUpdate-->updateJobInfo calling=======");
             updateJobInfo(usedTables, columns, queryStats, state, error, outputPreview, true);
         } else {
             updateJobInfo(usedTables, columns, queryStats, state, error, outputPreview, false);
@@ -254,6 +256,7 @@ public class Execution implements Callable<Job>
             List<List<Object>> outputPreview,
             boolean postUpdate)
     {
+        log.info("===== testing activejobstore ======== rlUpdate-->inside  ===updateJobInfo=======");
         if ((usedTables != null) && (usedTables.size() > 0)) {
             job.getTablesUsed().addAll(usedTables);
         }
@@ -271,6 +274,7 @@ public class Execution implements Callable<Job>
         }
 
         if (error != null) {
+          log.info("===== activejobstore ======== rlUpdate-->updateJobInfo()==  error not null=====");
             FailureInfo failureInfo = new FailureInfo(
                     error.getFailureInfo().getType(),
                     error.getFailureInfo().getMessage(),
@@ -292,7 +296,9 @@ public class Execution implements Callable<Job>
         }
 
         if (postUpdate) {
+            log.info("===== activejobstore ======== rlUpdate-->updateJobInfo()==  eventbus before=====");
             eventBus.post(new JobUpdateEvent(job, outputPreview));
+            log.info("===== activejobstore ======== rlUpdate-->updateJobInfo()==  eventbus after=====");
         }
     }
 

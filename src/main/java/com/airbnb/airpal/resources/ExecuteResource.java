@@ -19,7 +19,9 @@ import javax.ws.rs.core.Response;
 
 import java.io.IOException;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Path("/api/execute")
 public class ExecuteResource {
 
@@ -36,13 +38,14 @@ public class ExecuteResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response executeQuery(@Auth AirpalUser user, ExecutionRequest request) throws IOException
     {
+        log.info("11111111111111111111111");
         if (user != null) {
             final UUID queryUuid = executionClient.runQuery(
                     request,
                     user,
                     user.getDefaultSchema(),
                     user.getQueryTimeout());
-
+            
             return Response.ok(new ExecutionSuccess(queryUuid)).build();
         }
 
@@ -85,9 +88,13 @@ public class ExecuteResource {
     @Data
     public static class ExecutionPermissions
     {
+        @JsonProperty
         private final boolean canCreateTable;
+        @JsonProperty
         private final boolean canCreateCsv;
+        @JsonProperty
         private final String userName;
+        @JsonProperty
         private final String accessLevel;
     }
 }

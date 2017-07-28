@@ -39,7 +39,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 
 import static com.airbnb.airpal.presto.QueryRunner.QueryRunnerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ExecutionClient
 {
     private final ListeningExecutorService executor = MoreExecutors.listeningDecorator(
@@ -102,6 +104,7 @@ public class ExecutionClient
             final String schema,
             final Duration timeout)
     {
+        log.info("22222222222222222222222222222222");
         final UUID uuid = UUID.randomUUID();
         final Job job = new Job(user.getUserName(),
                                 query,
@@ -113,7 +116,9 @@ public class ExecutionClient
                                 null,
                                 null
         );
+//       log.info("===before execution executed sucesss ========"+job.getQueryStarted());
 
+         log.info("============sending job to Execution =================="+job.toString());
         final Execution execution = new Execution(job,
                 eventBus,
                 queryRunnerFactory.create(user.getUserName(), schema),
@@ -125,43 +130,57 @@ public class ExecutionClient
                 persistorFactory);
 
         executionMap.put(uuid, execution);
+        log.info("=====activeJobsStore().jobstarted is calling========================="+job.toString());
         activeJobsStore.jobStarted(job);
-
+        log.info("============activeJobsStore.jobStarted() executed sucesss =================="+job.getQueryStarted().getMillis());
+        log.info("============ ==================");
         ListenableFuture<Job> result = executor.submit(execution);
+        log.info("============ =================="+result.toString());
         Futures.addCallback(result, new FutureCallback<Job>()
         {
             @Override
             public void onSuccess(@Nullable Job result)
             {
+               log.info("ssssssssssssssssssssssssssssssssssssssssssssssssss");
+               log.info("Result ========="+result);
                 if (result != null) {
                     result.setState(JobState.FINISHED);
                 }
+                log.info("=====sucess jobfinished() method calling==========");
                 jobFinished(result);
             }
 
             @Override
             public void onFailure(@NotNull Throwable t)
             {
+                 
                 if (t instanceof ExecutionFailureException) {
+                  log.info("fffffffffffffffffffffffffffffffffffffffffffffffff");
                     ExecutionFailureException e = (ExecutionFailureException) t;
                     Job j = e.getJob();
+                    log.info("ffffffffffffffffffffffffffff=====================jobf==" +j.toString());
                     j.setState(JobState.FAILED);
                     if (j.getError() == null) {
+                      log.info("ffffffffffffffff================j===========error equal null");
                         j.setError(new QueryError(e.getMessage(), null, -1, null, null, null, null));
                     }
-
+                  log.info("=====failure jobfinished() method calling==========");
                     jobFinished(j);
                 }
             }
         });
-
+         log.info("=******************** uuid==job.getQueryStarted()========"+job.getQueryStarted().toString());
         return uuid;
     }
 
     protected void jobFinished(Job job)
     {
+        log.info("=====inside  jobfinished() method ========= " +job);
         job.setQueryFinished(new DateTime());
+        log.info("=====  jobfinished()--> activeJobsStore.jobFinished(job) method below========= " +job.toString());
         activeJobsStore.jobFinished(job);
+        log.info("=====  jobfinished()-->  historyStore.addRun(job)-->adds job into history=====method caling below ========= ");
+
         historyStore.addRun(job);
 
         for (Table t : job.getTablesUsed()) {
@@ -176,8 +195,9 @@ public class ExecutionClient
                 tables.add(parts[1]);
             }
         }
-
+        log.info("===== eventBus.post(new JobFinishedEvent(job));====before===== ");
         eventBus.post(new JobFinishedEvent(job));
+         log.info("===== eventBus.post(new JobFinishedEvent(job));====after===== ");
         executionMap.remove(job.getUuid());
     }
 

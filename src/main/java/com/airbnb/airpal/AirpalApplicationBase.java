@@ -31,7 +31,9 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import org.eclipse.jetty.server.Handler;
-
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.hubspot.rosetta.Rosetta;
+ 
 import javax.servlet.ServletRegistration;
 
 import java.util.Arrays;
@@ -121,5 +123,9 @@ public abstract class AirpalApplicationBase<T extends AirpalConfiguration>
                 ((BiDiGzipHandler) handler).addExcludedMimeTypes(SERVER_SENT_EVENTS);
             }
         });
+         environment.getObjectMapper().disable(
+               MapperFeature.AUTO_DETECT_GETTERS);
+         Rosetta.getMapper().disable(
+                MapperFeature.AUTO_DETECT_GETTERS);
     }
 }

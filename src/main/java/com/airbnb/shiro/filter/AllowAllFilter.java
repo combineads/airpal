@@ -22,6 +22,7 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 public class AllowAllFilter
@@ -42,17 +43,23 @@ public class AllowAllFilter
         log.info("createToken called");
         
         Enumeration<String> paramNames=request.getParameterNames();
+        String url = ((HttpServletRequest)request).getRequestURL().toString();
+        log.info("URL pattern =================="+url);
+        if(url.contains("/app"))  
+        {
         for(;paramNames.hasMoreElements();)
         {
           String paramName=(String)paramNames.nextElement();
           log.info("createToken called=============paramname===="+paramName);
+          
           projectattr= request.getParameter(paramName);
           String[]  attr= projectattr.split("_");
           projid= attr[0];
           email= attr[1];
           log.info("createToken called=============param value===="+email);
           log.info("createToken called=============param value===="+projid);
-         }
+        }
+        }
          return new AllowAllToken(request.getRemoteHost(), true, email, ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
     }
 

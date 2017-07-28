@@ -13,10 +13,17 @@ public class CSVPersistentOutput implements PersistentJobOutput
 {
     @Getter
     @Setter
+    @JsonProperty
     private URI location;
+    
+    
     @Getter
+    @JsonProperty
     private final String type;
+    
+    
     @Getter
+    @JsonProperty
     private final String description;
 
     @JsonCreator
