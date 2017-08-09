@@ -19,7 +19,7 @@ const xhr = (url, params = {}) => {
     headers: { 'Content-Type': 'application/json' },
     credentials: 'same-origin'
   }, params);
-  var baseUrl = 'http://bbc2.sics.se:45029/hopsworks-api/airpal';
+  var baseUrl = 'http://bbc2.sics.se:44830/hopsworks-api/airpal';
   return fetch(baseUrl+url, params)
     .then(status)
     .then(json);

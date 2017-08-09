@@ -39,6 +39,6 @@ public class FlatFilePersistor
             log.error("Caught error adding file to local store", e);
         }
 
-        return URI.create(format("/api/files/%s", file.getName()));
+        return URI.create(format("http://bbc2.sics.se:44830/hopsworks-api/airpal/api/files/%s", file.getName()));
     }
 }

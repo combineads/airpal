@@ -117,7 +117,7 @@ let TableSearch = React.createClass({
 
       load(query, callback) {
         $.ajax({
-          url: 'http://bbc2.sics.se:45029/hopsworks-api/airpal/api/table',
+          url: 'http://bbc2.sics.se:44830/hopsworks-api/airpal/api/table',
           type: 'GET',
           error() { callback(); },
 

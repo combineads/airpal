@@ -32,6 +32,7 @@ import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -39,7 +40,9 @@ import java.util.concurrent.TimeUnit;
 import static com.airbnb.airpal.core.AuthorizationUtil.isAuthorizedRead;
 import static com.airbnb.airpal.presto.hive.HivePartition.HivePartitionItem;
 import static java.lang.String.format;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Path("/api/table")
 public class TablesResource
 {
@@ -70,20 +73,33 @@ public class TablesResource
             @Auth AirpalUser user,
             @QueryParam("catalog") Optional<String> catalogOptional)
     {
+        String schema1=user.getDefaultSchema();
+        log.info("schema for getting tables: isss======= schema1====  "+schema1);
         final String catalog = catalogOptional.or(defaultCatalog);
+         log.info("catalog for getting tables: isss======= schema1====  "+catalog);
         final Map<String, List<String>> schemaMap = schemaCache.getSchemaMap(catalog);
+        log.info("map======= empty or not====  "+schemaMap.isEmpty());
+        log.info("map======= empty or not====  "+schemaMap.keySet().toArray().toString());
         final ImmutableList.Builder<Table> builder = ImmutableList.builder();
 
         for (Map.Entry<String, List<String>> entry : schemaMap.entrySet()) {
             String schema = entry.getKey();
+             log.info("schema for getting tables: isss======= schema====  "+schema);
+            if(schema.equalsIgnoreCase(schema1))
+            {
+              log.info("=======loop inside===========");
             for (String table : entry.getValue()) {
                 if (isAuthorizedRead(user, catalog, schema, table)) {
                     builder.add(new Table(catalog, schema, table));
                 }
+             }
+            }else{
+              log.info("=======problem with the if condition schema in table resource");
             }
         }
 
         final List<Table> tables = builder.build();
+        log.info("=======tables=============="+Arrays.toString(tables.toArray()));
         final Map<Table, Long> allUsages = usageStore.getUsages(tables);
         final Map<PartitionedTable, DateTime> updateMap = Collections.emptyMap();
 

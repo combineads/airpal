@@ -32,6 +32,8 @@ public class AllowAllFilter
     static String  projectattr;
     String email;
     String projid;
+    String schema;
+    String role;
     @Setter
     private List<UserGroup> groups = Collections.emptyList();
 
@@ -53,14 +55,19 @@ public class AllowAllFilter
           log.info("createToken called=============paramname===="+paramName);
           
           projectattr= request.getParameter(paramName);
-          String[]  attr= projectattr.split("_");
+String[]  attr= projectattr.split("_");
+          log.info("createToken called=============attributes array===="+attr.toString());
           projid= attr[0];
           email= attr[1];
+          schema=attr[2];
+          role=attr[3];
+         
           log.info("createToken called=============param value===="+email);
           log.info("createToken called=============param value===="+projid);
+          log.info("createToken called=============attributes ===="+schema+"_"+role);
         }
         }
-         return new AllowAllToken(request.getRemoteHost(), true, email, ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
+         return new AllowAllToken(request.getRemoteHost(), true, email, ImmutableSet.of("all"), schema, Duration.standardHours(1), role);
     }
 
     @Override

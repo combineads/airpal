@@ -7,16 +7,37 @@ import ResultsPreviewActions from '../actions/ResultsPreviewActions'
 import QueryActions from '../actions/QueryActions'
 import QueryStore from '../stores/QueryStore';
 import QuerySaveModal from './QuerySaveModal';
+import UserActions from '../actions/UserActions';
+import UserStore from '../stores/UserStore';
+import Alert from './Alert';
 
 import 'brace/theme/solarized_light';
 import 'brace/mode/sql';
 
+// State actions
+function getStateFromStore() {
+  return {
+    user: UserStore.getCurrentUser()
+  };
+}
+
 let QueryEditor = React.createClass({
   displayName: 'QueryEditor',
   mixins: [OverlayMixin],
-
+  
+   getInitialState() {
+    return {
+      isModalOpen: false,
+      isModal: false,
+      runText: 'query',
+      user: UserStore.getCurrentUser()
+    };
+  },
+   
   componentDidMount() {
-
+      
+    UserStore.listen(this._onChange);
+    UserActions.fetchCurrentUser();
     // Create the editor
     this.editor = ace.edit(this.refs.queryEditor.getDOMNode());
 
@@ -36,16 +57,13 @@ let QueryEditor = React.createClass({
   },
 
   componentWillUnmount() {
+    UserStore.unlisten(this._onChange);
     QueryStore.unlisten(this._selectQuery);
     QueryStore.unlisten(this._hideModal);
+    
   },
-
-  getInitialState() {
-    return {
-      isModalOpen: false,
-      runText: 'query'
-    };
-  },
+      
+  
 
   render() {
     return (
@@ -76,7 +94,7 @@ let QueryEditor = React.createClass({
                     Save {this.state.runText}
                 </button>
               </div>
-
+               
               <div className="btn-group">
                 <button className="btn btn-success"
                   onClick={this.handleRun}>
@@ -89,12 +107,26 @@ let QueryEditor = React.createClass({
       </div>
     );
   },
-
+   /* Store events */
+  _onChange() {
+    this.setState(getStateFromStore());
+  },
   renderOverlay() {
-    if (!this.state.isModalOpen) return <span />;
+    console.log('renderoverlay----');
+    
+    console.log('isModalOpen');
+     console.log(this.state.isModalOpen);
+    console.log('ismodel value');
+    console.log(this.state.isModal);
+    if (!this.state.isModalOpen && !this.state.isModal) return <span />;
+   if (this.state.isModalOpen || this.state.isModal) 
+   {
+ // Render the modal when it's needed
+    if(this.state.isModalOpen)return (<QuerySaveModal onRequestHide={this.handleToggle} query={this._getQuery()} />);
+    console.log('ismodel value');
 
-    // Render the modal when it's needed
-    return (<QuerySaveModal onRequestHide={this.handleToggle} query={this._getQuery()} />);
+    if(this.state.isModal)return (<Alert onRequestHide={this.handleAlert} query={this._getQuery()} />);
+   }
   },
 
   // - Internal events ----------------------------------------------------- //
@@ -103,15 +135,44 @@ let QueryEditor = React.createClass({
       isModalOpen: !this.state.isModalOpen
     });
   },
-
+  
+  handleAlert(){
+    console.log('handle alert-----');
+     this.setState({
+      isModal: !this.state.isModal
+    });
+    console.log(isModal);
+  },
   handleRun() {
+    //check the access level
+   let s1= this._getQuery();
+   console.log('s1 isssssssss-'); 
+   console.log({s1});
+    
+   let s2= s1.split(" ");
+   let s4=s2[0];
+    console.log('s2 is---- ');
+    console.log(s2[0]);
+   let s3=this.state.user.executionPermissions.accessLevel;
+   console.log('executepermissions----');
+   console.log({s3});
+    if(( s3.toUpperCase()=== 'DATA-SCIENTIST') && (s4.toUpperCase() !== 'SELECT'))
+    {
+      console.log('first if loop');
+       console.log('2nd if loop');
+       this.handleAlert();
+    }
+   else{
+    console.log('else loop');
     ResultsPreviewActions.clearResultsPreview();
     QueryActions.selectQuery(this._getQuery());
     ResultsPreviewActions.selectPreviewQuery(this._getQuery());
     RunActions.execute({
       query: this._getQuery(),
       tmpTable: this._getCustomTableName()
+     
     });
+   }
   },
 
   handleChangeSelection() {
@@ -201,6 +262,10 @@ let QueryEditor = React.createClass({
   _hideModal() {
     this.setState({
       isModalOpen: false
+      
+    });
+    this.setState({
+       isModal:false
     });
   },
 
@@ -212,3 +277,4 @@ let QueryEditor = React.createClass({
 });
 
 export default QueryEditor;
+

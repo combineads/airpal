@@ -75,12 +75,15 @@ public class QueryResource
             @FormParam("name") String name,
             @FormParam("query") String query)
     {
+       log.info("saved query === user======"+user);
+        log.info("saved query === user======"+user.getUserName());
+        log.info("saved query === description======"+description);
+        log.info("saved query === name======"+name);
+        log.info("saved query === query======"+query);
         CreateSavedQueryBuilder createFeaturedQueryRequest = CreateSavedQueryBuilder.featured()
                 .description(description)
                 .name(name)
                 .query(query);
-        log.info("saved query === user======"+user);
-        log.info("saved query === user======"+user.getUserName());
         if (user != null) {
             SavedQuery savedQuery = createFeaturedQueryRequest.user(user.getUserName())
                     .build();

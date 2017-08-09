@@ -60,7 +60,7 @@ class RunStore {
 
     // Create a new listener to the API endpoint
     
-    this._eventSource = new EventSource('http://bbc2.sics.se:45029/hopsworks-api/airpal/api/updates/subscribe');
+    this._eventSource = new EventSource('http://bbc2.sics.se:44830/hopsworks-api/airpal/api/updates/subscribe');
 
     // Listen to incoming messages
     this._eventSource.addEventListener('open', handleOpen);

@@ -85,6 +85,8 @@ public class SchemaCache
                         for (List<Object> row : results.getData()) {
                             String schema = (String) row.get(1);
                             String table = (String) row.get(2);
+                            log.info("====SchemaCache=== queryMetadata==schema==  "+schema);
+                           log.info("====SchemaCache=== queryMetadata==table==  "+table);
 
                             if (EXCLUDED_SCHEMAS.contains(schema)) {
                                 continue;
