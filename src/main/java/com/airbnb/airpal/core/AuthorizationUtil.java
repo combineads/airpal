@@ -11,17 +11,42 @@ public class AuthorizationUtil
 {
     public static boolean isAuthorizedRead(AirpalUser subject, Table table)
     {
-        return isAuthorizedRead(subject, table.getConnectorId(), table.getSchema(), table.getTable());
+        boolean isaccess= false;
+        String access = subject.getAccessLevel();
+        if(access.equalsIgnoreCase("Data-owner")|| access.equalsIgnoreCase("data-scientist"))
+        {
+         isaccess= true;
+        }
+       return isaccess;
+        //return isAuthorizedRead(subject, table.getConnectorId(), table.getSchema(), table.getTable());
     }
 
     public static boolean isAuthorizedRead(AirpalUser subject, String connectorId, String schema, String table)
     {
-        return subject.isPermitted(format("read:%s.%s:%s", connectorId, schema, table));
+         boolean isaccess= false;
+        String access = subject.getAccessLevel();
+        if(access.equalsIgnoreCase("Data-owner")|| access.equalsIgnoreCase("data-scientist"))
+        {
+         isaccess= true;
+        }
+       return isaccess;
+       // return subject.isPermitted(format("read:%s.%s:%s", connectorId, schema, table));
     }
 
     public static boolean isAuthorizedWrite(AirpalUser subject, String connectorId, String schema, String table)
-    {
-        return subject.isPermitted(format("write:%s.%s:%s", connectorId, schema, table));
+    {   
+        boolean isaccess= false;
+        String access = subject.getAccessLevel();
+        if(access.equalsIgnoreCase("Data-owner"))
+        {
+         isaccess= true;
+        }else{
+          isaccess=false;
+        }
+        
+       return isaccess;
+      
+      //  return subject.isPermitted(format("write:%s.%s:%s", connectorId, schema, table));
     }
 
     public static class AuthorizedTablesPredicate
@@ -45,3 +70,4 @@ public class AuthorizationUtil
         }
     }
 }
+

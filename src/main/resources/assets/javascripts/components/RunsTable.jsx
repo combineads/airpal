@@ -22,6 +22,7 @@ let columnWidths = {
   started: 220,
   duration: 80,
   output: 230,
+  csv: 0,
 };
 
 // State actions
@@ -57,7 +58,8 @@ let RunsTable = React.createClass({
 
   getStateFromStore() {
     return {
-      runs: getRuns(this.props.user)
+      runs: getRuns(this.props.user),
+       
     };
   },
 
@@ -106,7 +108,7 @@ let RunsTable = React.createClass({
   },
 
   rowGetter(rowIndex) {
-    return formatRun(this.state.runs[rowIndex], this.props.user);
+    return formatRun(this.state.runs[rowIndex], this.props.user, this.props.cancreatecsv);
   },
 
   renderEmptyMessage() {
@@ -177,10 +179,18 @@ function getColumns(forCurrentUser) {
       isResizable={true}
       minWidth={5}
     />,
+    <Column
+      label="csv"
+      width={columnWidths.output}
+      dataKey="createcsv"
+      key={i++}
+      isResizable={true}
+      minWidth={5}
+    />
   ]);
 }
 
-function formatRun(run, currentUser) {
+function formatRun(run, currentUser, cancreatecsv) {
   if (!run) return;
   return {
     user: run.user,
@@ -189,6 +199,7 @@ function formatRun(run, currentUser) {
     started: run.queryStarted,
     duration: run.queryStats && run.queryStats.elapsedTime,
     output: run.output && run.output,
+    createcsv: cancreatecsv,
     _run: run,
     _currentUser: currentUser
   };
@@ -223,11 +234,11 @@ function selectTable(table, e) {
 }
 
 function previewQueryResult(file, query, e) {
-  e.preventDefault();
-  ResultsPreviewActions.loadResultsPreview(file);
+   e.preventDefault();
+   ResultsPreviewActions.loadResultsPreview(file);
   ResultsPreviewActions.selectPreviewQuery(query);
   TabActions.selectTab(TabConstants.RESULTS_PREVIEW);
-}
+  }
 
 function killRun(uuid) {
   RunActions.kill(uuid);
@@ -245,7 +256,7 @@ let CellRenderers = {
       </a>
     );
   },
-
+ 
   status(cellData, cellDataKey, rowData, rowIndex, columnData, width) {
     let run = rowData._run;
     if (run.state === RunStateConstants.FAILED) {
@@ -264,11 +275,14 @@ let CellRenderers = {
     let currentUser = rowData._currentUser;
     let killable = currentUser && currentUser === run.user;
     let output = cellData;
+    let csv = rowData.createcsv;
     if (output && output.location && (run.state !== RunStateConstants.FAILED)) {
       if (output.location[0] === '/' || output.location.indexOf('http') != -1) {
+       if(csv)
+        {
         return (
           <div>
-            <a href={output.location} target="_blank" className='btn'>
+            <a href={output.location} target="_blank" className='btn' >
               Download CSV
               <i className='glyphicon glyphicon-download' />
             </a>
@@ -284,6 +298,22 @@ let CellRenderers = {
             </a>
           </div>
         );
+       }else{
+         return(
+         <div>
+            <a
+              href="#"
+              onClick={previewQueryResult.bind(
+                null,
+                output.location,
+                run.query
+              )}
+              className='btn'>
+              Preview Results
+            </a>
+          </div>
+        );
+        }
       } else {
         return (
           <a href="#" onClick={selectTable.bind(null, output.location)}>

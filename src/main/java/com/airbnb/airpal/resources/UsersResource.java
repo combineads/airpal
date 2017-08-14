@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.airbnb.airpal.resources.QueryResource.JOB_ORDERING;
+import com.google.inject.name.Named;
 
 @Path("/api/users/{id}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -37,29 +38,35 @@ public class UsersResource
 {
     private final JobHistoryStore jobHistoryStore;
     private final ActiveJobsStore activeJobsStore;
-
+    private final String defaultCatalog;
     @Inject
-    public UsersResource(JobHistoryStore jobHistoryStore, ActiveJobsStore activeJobsStore)
+    public UsersResource(JobHistoryStore jobHistoryStore, ActiveJobsStore activeJobsStore,
+      @Named("default-catalog") final String defaultCatalog)
     {
         this.jobHistoryStore = jobHistoryStore;
         this.activeJobsStore = activeJobsStore;
+        this.defaultCatalog = defaultCatalog;
     }
 
     @GET
     @Path("permissions")
     public Response getUserPermissions(
             @Auth AirpalUser user,
-            @PathParam("id") String userId)
+            @PathParam("id") String userId,
+            @QueryParam("catalog") Optional<String> catalogOptional)
     {
         if (user == null) {
             return Response.status(Response.Status.FORBIDDEN).build();
         } else {
-            return Response.ok(
-                    new ExecutionPermissions(
-                            AuthorizationUtil.isAuthorizedWrite(user, "hive", "airpal", "any"),
-                            true,
-                            user.getAccessLevel())
-            ).build();
+             String schema=user.getDefaultSchema();
+           final String catalog = catalogOptional.or(defaultCatalog);
+           
+            return Response.ok(new ExecuteResource.ExecutionPermissions(
+                    AuthorizationUtil.isAuthorizedWrite(user, catalog, schema, "any"),
+                    AuthorizationUtil.isAuthorizedWrite(user, catalog, schema, "any"),
+                    user.getUserName(),
+                    user.getAccessLevel()
+            )).build();
         }
     }
 
@@ -133,3 +140,4 @@ public class UsersResource
         return Response.ok(sortedResult).build();
     }
 }
+

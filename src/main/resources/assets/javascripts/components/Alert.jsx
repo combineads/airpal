@@ -12,10 +12,12 @@ let Alert = React.createClass({
     return (
       <Modal {...this.props} title="Alert message">
         <div className="modal-body alert-modal">
-          <form className="form-horizontal" action="#" onSubmit={this.handleSaveRequest}>
+          <form className="form-horizontal" action="#" onSubmit={this.handlequeryRequest}>
 
             <pre>{this.props.query}</pre>
-            <pre>{`You dont have aceess for this query`}</pre>
+
+           <div>
+            You dont have aceess for this query !  </div>
            </form>
         </div>
 

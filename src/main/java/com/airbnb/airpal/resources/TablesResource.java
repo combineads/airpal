@@ -32,7 +32,6 @@ import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -40,6 +39,7 @@ import java.util.concurrent.TimeUnit;
 import static com.airbnb.airpal.core.AuthorizationUtil.isAuthorizedRead;
 import static com.airbnb.airpal.presto.hive.HivePartition.HivePartitionItem;
 import static java.lang.String.format;
+import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -77,6 +77,7 @@ public class TablesResource
         log.info("schema for getting tables: isss======= schema1====  "+schema1);
         final String catalog = catalogOptional.or(defaultCatalog);
          log.info("catalog for getting tables: isss======= schema1====  "+catalog);
+         
         final Map<String, List<String>> schemaMap = schemaCache.getSchemaMap(catalog);
         log.info("map======= empty or not====  "+schemaMap.isEmpty());
         log.info("map======= empty or not====  "+schemaMap.keySet().toArray().toString());
@@ -276,3 +277,4 @@ public class TablesResource
         return partitionItems.build();
     }
 }
+

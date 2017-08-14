@@ -15,6 +15,7 @@ import 'brace/theme/solarized_light';
 import 'brace/mode/sql';
 
 // State actions
+
 function getStateFromStore() {
   return {
     user: UserStore.getCurrentUser()
@@ -24,13 +25,13 @@ function getStateFromStore() {
 let QueryEditor = React.createClass({
   displayName: 'QueryEditor',
   mixins: [OverlayMixin],
-  
-   getInitialState() {
-    return {
+
+  getInitialState() {
+  return {
       isModalOpen: false,
       isModal: false,
       runText: 'query',
-      user: UserStore.getCurrentUser()
+      users: getStateFromStore()
     };
   },
    
@@ -112,18 +113,11 @@ let QueryEditor = React.createClass({
     this.setState(getStateFromStore());
   },
   renderOverlay() {
-    console.log('renderoverlay----');
-    
-    console.log('isModalOpen');
-     console.log(this.state.isModalOpen);
-    console.log('ismodel value');
-    console.log(this.state.isModal);
     if (!this.state.isModalOpen && !this.state.isModal) return <span />;
    if (this.state.isModalOpen || this.state.isModal) 
    {
  // Render the modal when it's needed
     if(this.state.isModalOpen)return (<QuerySaveModal onRequestHide={this.handleToggle} query={this._getQuery()} />);
-    console.log('ismodel value');
 
     if(this.state.isModal)return (<Alert onRequestHide={this.handleAlert} query={this._getQuery()} />);
    }
@@ -137,25 +131,17 @@ let QueryEditor = React.createClass({
   },
   
   handleAlert(){
-    console.log('handle alert-----');
      this.setState({
       isModal: !this.state.isModal
     });
-    console.log(isModal);
   },
   handleRun() {
     //check the access level
    let s1= this._getQuery();
-   console.log('s1 isssssssss-'); 
-   console.log({s1});
     
    let s2= s1.split(" ");
    let s4=s2[0];
-    console.log('s2 is---- ');
-    console.log(s2[0]);
    let s3=this.state.user.executionPermissions.accessLevel;
-   console.log('executepermissions----');
-   console.log({s3});
     if(( s3.toUpperCase()=== 'DATA-SCIENTIST') && (s4.toUpperCase() !== 'SELECT'))
     {
       console.log('first if loop');
