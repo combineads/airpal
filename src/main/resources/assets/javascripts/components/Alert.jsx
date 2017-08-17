@@ -17,7 +17,7 @@ let Alert = React.createClass({
             <pre>{this.props.query}</pre>
 
            <div>
-            You dont have aceess for this query !  </div>
+            You want Data-owner previliges to run this query !  </div>
            </form>
         </div>
 

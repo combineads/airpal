@@ -9,7 +9,7 @@ import MySavedQueries from './MySavedQueries';
 import AllRunningQueries from './AllRunningQueries';
 import DataPreview from './DataPreview';
 import ResultsTable from './ResultsTable';
-
+import QueryResults from './QueryResults';
 import TableStore from '../stores/TableStore';
 import TabStore from '../stores/TabStore';
 
@@ -127,6 +127,14 @@ let QueryInformation = React.createClass({
               tab="Results">
                 {selectedTab === 5 &&
                   <ResultsTable
+                    tableWidth={this.state.tableWidth}
+                    tableHeight={this.state.tableHeight}/>}
+            </TabPane>
+            <TabPane className="query-information-table-tab"
+              eventKey={6}
+              tab="Query Results">
+                {selectedTab === 6 &&
+                  <QueryResults
                     tableWidth={this.state.tableWidth}
                     tableHeight={this.state.tableHeight}/>}
             </TabPane>

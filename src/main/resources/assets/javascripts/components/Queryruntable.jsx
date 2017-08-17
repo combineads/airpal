@@ -1,3 +1,4 @@
+
 import React from 'react/addons';
 import _ from 'lodash';
 import moment from 'moment';
@@ -27,14 +28,15 @@ let columnWidths = {
 
 // State actions
 function getRuns(user) {
-  if (user) {
-    return RunStore.getCollection().where({
+
+if (user) {
+    return RunStore.getQueryCollection().where({
       user
     }, {
       sort: true
     })
   } else {
-    return RunStore.getCollection().all({
+    return RunStore.getQueryCollection().all({
       sort: true
     });
   }
@@ -52,7 +54,7 @@ let ErrorModal = React.createClass({
   }
 });
 
-let RunsTable = React.createClass({
+let Queryruntable = React.createClass({
   displayName: 'RunsTable',
   mixins: [UpdateWidthMixin],
 
@@ -131,7 +133,7 @@ function getColumns(forCurrentUser) {
       width={columnWidths.user}
       dataKey="user"
       cellRenderer={getRenderer('user')}
-      key={i++}
+      key={i}
       isResizable={true}
       minWidth={5}
     />),
@@ -140,7 +142,7 @@ function getColumns(forCurrentUser) {
       width={columnWidths.query}
       dataKey="query"
       cellRenderer={getRenderer('query')}
-      key={i++}
+      key={i}
       isResizable={true}
       minWidth={5}
     />,
@@ -149,7 +151,7 @@ function getColumns(forCurrentUser) {
       width={columnWidths.status}
       dataKey="status"
       cellRenderer={getRenderer('status')}
-      key={i++}
+      key={i}
       isResizable={true}
       minWidth={5}
     />,
@@ -166,7 +168,7 @@ function getColumns(forCurrentUser) {
       label="Duration"
       width={columnWidths.duration}
       dataKey="duration"
-      key={i++}
+      key={i}
       isResizable={true}
       minWidth={5}
     />,
@@ -175,11 +177,18 @@ function getColumns(forCurrentUser) {
       width={columnWidths.output}
       dataKey="output"
       cellRenderer={getRenderer('output')}
-      key={i++}
+      key={i}
       isResizable={true}
       minWidth={5}
     />,
-
+    <Column
+      label="csv"
+      width={columnWidths.output}
+      dataKey="createcsv"
+      key={i}
+      isResizable={true}
+      minWidth={5}
+    />
   ]);
 }
 
@@ -355,4 +364,5 @@ function getProgressFromStats(stats) {
   }
 }
 
-export default RunsTable;
+export default Queryruntable;
+

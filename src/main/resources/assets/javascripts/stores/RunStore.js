@@ -34,6 +34,7 @@ class RunStore {
       onDisconnect: [RunActions.WENT_OFFLINE, RunActions.DISCONNECT],
       onResetOnlineStatus: RunActions.RESET_ONLINE_STATUS,
       onAddMultipleRuns: RunActions.ADD_MULTIPLE_RUNS,
+      onAddQuery:RunActions.ADD_QUERY,
       onAddRun: RunActions.ADD_RUN,
       onMessage: RunActions.HANDLE_CONNECTION_MESSAGE,
       onFetchHistory: RunActions.FETCH_HISTORY,
@@ -41,10 +42,15 @@ class RunStore {
     });
 
     this.exportPublicMethods({
-      getCollection: this.getCollection
+      getCollection: this.getCollection,
+      getQueryCollection: this.getQueryCollection
     });
 
     this.collection = new FluxCollection({
+      comparator: (model) => -model.queryStarted
+    });
+   
+   this.querycollection = new FluxCollection({
       comparator: (model) => -model.queryStarted
     });
 
@@ -95,6 +101,9 @@ class RunStore {
   onAddMultipleRuns(data) {
     this.collection.add(data);
   }
+ onAddQuery(data){
+ this.querycollection.add(data);
+  }
 
   onAddRun(data) {
     this.collection.add(data);
@@ -119,7 +128,11 @@ class RunStore {
 
   getCollection() {
     return this.getState().collection;
-  }
+  }  
+ getQueryCollection() {
+    return this.getState().querycollection;
+  } 
+
 }
 
 export default alt.createStore(RunStore, 'RunStore');

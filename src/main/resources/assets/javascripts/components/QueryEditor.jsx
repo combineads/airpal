@@ -140,15 +140,21 @@ let QueryEditor = React.createClass({
    let s1= this._getQuery();
     
    let s2= s1.split(" ");
-   let s4=s2[0];
+   let s4=s2[0].toUpperCase();
    let s3=this.state.user.executionPermissions.accessLevel;
-    if(( s3.toUpperCase()=== 'DATA-SCIENTIST') && (s4.toUpperCase() !== 'SELECT'))
+   console.log('query value----');
+   console.log({s4});
+   let queryArray=['SELECT', 'COMMIT' , 'DESCRIBE' ,'EXPLAIN', 'RESET' , 'ROLLBACK' , 'SET' , 'SHOW' , 'VALUES'];
+  let intValue= queryArray.indexOf(s4);
+  console.log('int value-------');
+  console.log({intValue});
+{/*  if(( s3.toUpperCase()=== 'DATA-SCIENTIST') && (intValue === -1))
     {
       console.log('first if loop');
        console.log('2nd if loop');
        this.handleAlert();
     }
-   else{
+   else{ */}
     console.log('else loop');
     ResultsPreviewActions.clearResultsPreview();
     QueryActions.selectQuery(this._getQuery());
@@ -156,9 +162,10 @@ let QueryEditor = React.createClass({
     RunActions.execute({
       query: this._getQuery(),
       tmpTable: this._getCustomTableName()
-     
-    });
-   }
+ 
+       });
+
+  //  }
   },
 
   handleChangeSelection() {

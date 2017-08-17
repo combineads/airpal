@@ -6,6 +6,7 @@ class RunActions {
   constructor() {
     this.generateActions(
       'addMultipleRuns',
+      'addQuery',
       'addRun',
       'connect',
       'disconnect',
@@ -27,6 +28,12 @@ class RunActions {
     RunApiUtils.execute(query, tmpTable).then((runObject) => {
       this.dispatch();
       this.actions.addRun(runObject);
+    }).catch(logError);
+  }
+
+fetchForUser(user){
+    RunApiUtils.fetchForUser(user).then((results) => {
+     this.actions.addQuery(results);
     }).catch(logError);
   }
 
