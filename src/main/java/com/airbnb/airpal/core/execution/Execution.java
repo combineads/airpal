@@ -70,7 +70,7 @@ public class Execution implements Callable<Job>
     private final ColumnCache columnCache;
     private final OutputBuilderFactory outputBuilderFactory;
     private final PersistorFactory persistorFactory;
-    private final RateLimiter updateLimiter = RateLimiter.create(2.0);
+    private final RateLimiter updateLimiter = RateLimiter.create(1.0);
     private final int maxRowsPreviewOutput = 1_000;
     private boolean isCancelled = false;
 

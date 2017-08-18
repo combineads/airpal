@@ -35,6 +35,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import com.google.inject.name.Named;
+import com.google.common.base.Optional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -43,13 +45,16 @@ public class QueryResource
 {
     private final JobHistoryStore jobHistoryStore;
     private final QueryStore queryStore;
+    private final String defaultCatalog;
 
     @Inject
     public QueryResource(JobHistoryStore jobHistoryStore,
-            QueryStore queryStore)
+            QueryStore queryStore,
+             @Named("default-catalog") final String defaultCatalog)
     {
         this.jobHistoryStore = jobHistoryStore;
         this.queryStore = queryStore;
+        this.defaultCatalog = defaultCatalog;
     }
 
     @GET
@@ -136,12 +141,22 @@ public class QueryResource
     @Produces(MediaType.APPLICATION_JSON)
     public Response getHistory(
             @Auth AirpalUser user,
-            @QueryParam("table") List<Table> tables)
+            @QueryParam("table") List<Table> tables,
+            @QueryParam("catalog") Optional<String> catalogOptional,
+            @QueryParam("results") int numResults)
     {
+
+      String schema1=user.getDefaultSchema();
+      log.info("schema for getting tables: isss======= schema1====  "+schema1);
+      final String catalog = catalogOptional.or(defaultCatalog);
+      log.info("catalog for getting tables: isss======= schema1====  "+catalog);
+      int results = Optional.of(numResults).or(200);
+
         Iterable<Job> recentlyRun;
 
         if (tables.size() < 1) {
-            recentlyRun = jobHistoryStore.getRecentlyRun(200);
+//            recentlyRun = jobHistoryStore.getRecentlyRun(200);
+              recentlyRun = jobHistoryStore.getRecentlyRun(results, catalog,schema1);
         }
         else {
             Table[] tablesArray = tables.toArray(new Table[tables.size()]);

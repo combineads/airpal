@@ -7,6 +7,17 @@ import java.util.List;
 
 public interface JobHistoryStore
 {
+   /**
+   *
+   * @param maxResults
+   * @param user
+   * @param schema
+   * @param catalog
+   * @return
+   */
+    public List<Job> getRecentlyRun(long maxResults, String catalog,String schema );
+   
+    public List<Job> getRecentlyRunForUser(String user, long maxResults,String catalog,String schema );
     public List<Job> getRecentlyRun(long maxResults);
 
     public List<Job> getRecentlyRun(long maxResults, Table table1, Table... otherTables);

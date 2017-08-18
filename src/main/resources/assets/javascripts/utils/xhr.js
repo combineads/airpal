@@ -2,8 +2,11 @@ const status = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return Promise.resolve(response);
   } else {
-    return Promise.reject(new Error(response.statusText));
-  }
+    return Promise.reject(new Error(response.statusText)).then(function(error){
+      }, function(error) {
+         console.log(error); // Stacktrace
+        });
+}
 };
 
 const json = (response) => {

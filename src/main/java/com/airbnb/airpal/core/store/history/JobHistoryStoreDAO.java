@@ -106,6 +106,18 @@ public class JobHistoryStoreDAO
             return Collections.emptyList();
         }
     }
+    @Override
+    public List<Job> getRecentlyRun(long maxResults, String catalog,String schema)
+    {
+        try {
+             String tablesClause = format("(connector_id = '%s' AND schema_ = '%s')", catalog,schema);
+                      
+            return getJobs(maxResults, 1, tablesClause, null);
+        } catch (Exception e) {
+            log.error("Caught exception during getRecentlyRun", e);
+            return Collections.emptyList();
+        }
+    }
 
     @Override
     public List<Job> getRecentlyRun(long maxResults, Table table1, Table... otherTables)
@@ -124,6 +136,21 @@ public class JobHistoryStoreDAO
             return Collections.emptyList();
         }
     }
+      
+    @Override
+    public List<Job> getRecentlyRunForUser(String user, long maxResults,String catalog,String schema )
+    {
+        try {
+          String usersClause = format("user = '%s'", user);
+          String tablesClause = format("(connector_id = '%s' AND schema_ = '%s')", catalog,schema);
+                      
+            return getJobs(maxResults, 1, tablesClause, usersClause);
+        } catch (Exception e) {
+            log.error("Caught exception during getRecentlyRun", e);
+            return Collections.emptyList();
+        }
+    }
+
 
     @Override
     public List<Job> getRecentlyRunForUser(String user, long maxResults)
@@ -161,21 +188,6 @@ public class JobHistoryStoreDAO
 
         // Create the job
         log.info("job history Dao=======job========"+job.getQuery()+job.getColumns());
-//        if(job.getColumns() != null) {
-//          for(Column col :job.getColumns()  ){
-//           
-//            if(col.getTypeSignature().getArguments() != null ){
-////              for(ClientTypeSignatureParameter clntTypeSign : col.getTypeSignature().getArguments()){
-////                log.info("job type signature=Arguments==clntTypeSign====job========"+clntTypeSign);
-////                 log.info("job type signature=Arguments==getKind====job========"+clntTypeSign.getKind());
-////                  log.info("job type signature=Arguments==getNamedTypeSignature====job========"+clntTypeSign.getNamedTypeSignature());
-////                   log.info("job type signature=Arguments==getTypeSignature====job========"+clntTypeSign.getTypeSignature());
-////              }
-//            
-//            
-//            }
-//          }
-//        }
           
         long jobId = jobDAO.createJob(job);
         

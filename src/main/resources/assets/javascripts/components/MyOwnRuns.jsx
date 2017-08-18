@@ -29,9 +29,6 @@ let MyOwnRuns = React.createClass({
       // Still loading user...
       return <span className="glyphicon glyphicon-repeat indicator-spinner"></span>;
     } else {
-      console.log('myOwn runs------');
-      console.log('acesss------');
-      console.log(user.executionPermissions.canCreateCsv);
       return (
         <RunsTable
           user={user.name}

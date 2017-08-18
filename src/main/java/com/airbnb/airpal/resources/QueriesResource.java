@@ -31,33 +31,46 @@ import java.util.UUID;
 
 import static com.airbnb.airpal.resources.QueryResource.JOB_ORDERING;
 
+import com.google.inject.name.Named;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Path("/api/queries")
 @Produces({MediaType.APPLICATION_JSON})
 public class QueriesResource
 {
     private final JobHistoryStore jobHistoryStore;
     private final ExecutionClient executionClient;
-
+    private final String defaultCatalog;
     @Inject
     public QueriesResource(
             JobHistoryStore jobHistoryStore,
-            ExecutionClient executionClient)
+            ExecutionClient executionClient,
+            @Named("default-catalog") final String defaultCatalog)
     {
         this.jobHistoryStore = jobHistoryStore;
         this.executionClient = executionClient;
+        this.defaultCatalog = defaultCatalog;
     }
 
     @GET
     public Response getQueries(
             @Auth AirpalUser user,
             @QueryParam("results") int numResults,
-            @QueryParam("table") List<PartitionedTable> tables)
+            @QueryParam("table") List<PartitionedTable> tables,
+            @QueryParam("catalog") Optional<String> catalogOptional)
     {
+        String schema=user.getDefaultSchema();
+       log.info("schema for getting tables: isss======= schema1====  "+schema);
+        final String catalog = catalogOptional.or(defaultCatalog);
+        log.info("catalog for getting tables: isss======= schema1====  "+catalog); 
+   
         Iterable<Job> recentlyRun;
         int results = Optional.of(numResults).or(200);
 
         if (tables.size() < 1) {
-            recentlyRun = jobHistoryStore.getRecentlyRun(results);
+//            recentlyRun = jobHistoryStore.getRecentlyRun(results);
+         recentlyRun = jobHistoryStore.getRecentlyRun(results, catalog, schema);
         } else {
             recentlyRun = jobHistoryStore.getRecentlyRun(
                     results,

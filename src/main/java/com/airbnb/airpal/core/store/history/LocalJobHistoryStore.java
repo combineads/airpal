@@ -88,6 +88,17 @@ public class LocalJobHistoryStore implements JobHistoryStore {
     {
         return null;
     }
+    @Override
+    public List<Job> getRecentlyRunForUser(String user, long maxResults,String catalog,String schema )
+    {
+       return null;
+    }
+    @Override
+    public List<Job> getRecentlyRun(long maxResults, String catalog,String schema)
+    {
+      return null;
+    }
+
 
     @Override
     public List<Job> getRecentlyRun(long maxResults, Iterable<Table> tables)

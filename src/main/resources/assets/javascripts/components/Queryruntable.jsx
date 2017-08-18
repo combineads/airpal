@@ -23,7 +23,6 @@ let columnWidths = {
   started: 220,
   duration: 80,
   output: 230,
-  csv: 0,
 };
 
 // State actions
@@ -181,14 +180,6 @@ function getColumns(forCurrentUser) {
       isResizable={true}
       minWidth={5}
     />,
-    <Column
-      label="csv"
-      width={columnWidths.output}
-      dataKey="createcsv"
-      key={i}
-      isResizable={true}
-      minWidth={5}
-    />
   ]);
 }
 

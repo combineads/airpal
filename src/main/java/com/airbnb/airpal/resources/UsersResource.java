@@ -31,7 +31,9 @@ import java.util.List;
 
 import static com.airbnb.airpal.resources.QueryResource.JOB_ORDERING;
 import com.google.inject.name.Named;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Path("/api/users/{id}")
 @Produces(MediaType.APPLICATION_JSON)
 public class UsersResource
@@ -76,16 +78,25 @@ public class UsersResource
             @Auth AirpalUser user,
             @PathParam("id") String userId,
             @QueryParam("results") int numResults,
-            @QueryParam("table") List<PartitionedTable> tables)
+            @QueryParam("table") List<PartitionedTable> tables,
+            @QueryParam("catalog") Optional<String> catalogOptional)
+
     {
-        Iterable<Job> recentlyRun;
+
+        String schema=user.getDefaultSchema();
+        log.info("schema for getting tables: isss======= schema1====  "+schema);
+        final String catalog = catalogOptional.or(defaultCatalog);
+        log.info("catalog for getting tables: isss======= schema1====  "+catalog);     
+
+
+         Iterable<Job> recentlyRun;
         int results = Optional.of(numResults).or(0);
         if (results <= 0) {
             results = 100;
         }
 
         if (tables.size() < 1) {
-            recentlyRun = jobHistoryStore.getRecentlyRunForUser(userId, results);
+        recentlyRun = jobHistoryStore.getRecentlyRunForUser(userId, results, catalog, schema);
         } else {
             recentlyRun = jobHistoryStore.getRecentlyRunForUser(
                     userId,

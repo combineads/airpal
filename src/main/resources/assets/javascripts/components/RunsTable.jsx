@@ -22,7 +22,6 @@ let columnWidths = {
   started: 220,
   duration: 80,
   output: 230,
-  csv: 0,
 };
 
 // State actions
