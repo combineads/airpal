@@ -35,6 +35,7 @@ class RunStore {
       onResetOnlineStatus: RunActions.RESET_ONLINE_STATUS,
       onAddMultipleRuns: RunActions.ADD_MULTIPLE_RUNS,
       onAddQuery:RunActions.ADD_QUERY,
+      onAddFetch:RunActions.ADD_FETCH,
       onAddRun: RunActions.ADD_RUN,
       onMessage: RunActions.HANDLE_CONNECTION_MESSAGE,
       onFetchHistory: RunActions.FETCH_HISTORY,
@@ -43,7 +44,8 @@ class RunStore {
 
     this.exportPublicMethods({
       getCollection: this.getCollection,
-      getQueryCollection: this.getQueryCollection
+      getQueryCollection: this.getQueryCollection,
+     getFetchCollection: this.getFetchCollection
     });
 
     this.collection = new FluxCollection({
@@ -51,6 +53,9 @@ class RunStore {
     });
    
    this.querycollection = new FluxCollection({
+      comparator: (model) => -model.queryStarted
+    });
+    this.fetchcollection = new FluxCollection({
       comparator: (model) => -model.queryStarted
     });
 
@@ -104,6 +109,9 @@ class RunStore {
  onAddQuery(data){
  this.querycollection.add(data);
   }
+ onAddFetch(data) {
+    this.fetchcollection.add(data);
+  }
 
   onAddRun(data) {
     this.collection.add(data);
@@ -122,6 +130,7 @@ class RunStore {
     this.hasFetchedHistory = true;
   }
 
+  
   onExecute() {
     TabActions.selectTab.defer(1);
   }
@@ -131,6 +140,9 @@ class RunStore {
   }  
  getQueryCollection() {
     return this.getState().querycollection;
+  }
+  getFetchCollection() {
+    return this.getState().fetchcollection;
   } 
 
 }

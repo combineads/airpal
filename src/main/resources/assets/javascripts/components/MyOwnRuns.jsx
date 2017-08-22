@@ -31,7 +31,7 @@ let MyOwnRuns = React.createClass({
     } else {
       return (
         <RunsTable
-          user={user.name}
+         user={user.name}
           cancreatecsv={user.executionPermissions.canCreateCsv}
            tableWidth={this.props.tableWidth}
           tableHeight={this.props.tableHeight} />

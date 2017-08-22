@@ -109,9 +109,12 @@ public class JobHistoryStoreDAO
     @Override
     public List<Job> getRecentlyRun(long maxResults, String catalog,String schema)
     {
+
+         log.info("catalog and schema is ===" +catalog );
+         log.info("catalog and schema is ===" +schema );
         try {
-             String tablesClause = format("(connector_id = '%s' AND schema_ = '%s')", catalog,schema);
-                      
+             String tablesClause = format("schema_ = '%s'",schema);
+                                            
             return getJobs(maxResults, 1, tablesClause, null);
         } catch (Exception e) {
             log.error("Caught exception during getRecentlyRun", e);

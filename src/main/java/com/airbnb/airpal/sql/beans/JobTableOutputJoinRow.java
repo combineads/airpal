@@ -63,6 +63,7 @@ public class JobTableOutputJoinRow
                 throws SQLException
         {
             if (!accumulator.containsKey(rs.getId())) {
+               log.info("  schema is ========="+rs.toString());
                 accumulator.put(
                         rs.getId(),
                         new Job(

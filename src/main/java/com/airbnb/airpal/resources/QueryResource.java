@@ -147,7 +147,8 @@ public class QueryResource
     {
 
       String schema1=user.getDefaultSchema();
-      log.info("schema for getting tables: isss======= schema1====  "+schema1);
+     log.info("schema for getting tables: isss======= schema1====  "+schema1);
+     log.info("history tables size====  "+tables.size());
       final String catalog = catalogOptional.or(defaultCatalog);
       log.info("catalog for getting tables: isss======= schema1====  "+catalog);
       int results = Optional.of(numResults).or(200);
@@ -156,7 +157,8 @@ public class QueryResource
 
         if (tables.size() < 1) {
 //            recentlyRun = jobHistoryStore.getRecentlyRun(200);
-              recentlyRun = jobHistoryStore.getRecentlyRun(results, catalog,schema1);
+               log.info("catalog for getting tables: isss======= schema1====  "+catalog);
+              recentlyRun = jobHistoryStore.getRecentlyRun(200,catalog,schema1);
         }
         else {
             Table[] tablesArray = tables.toArray(new Table[tables.size()]);
@@ -168,11 +170,13 @@ public class QueryResource
         ImmutableList.Builder<Job> filtered = ImmutableList.builder();
         for (Job job : recentlyRun) {
             if (job.getTablesUsed().isEmpty() && (job.getState() == JobState.FAILED)) {
+               log.info("job table is empty=======g");
                 filtered.add(job);
                 continue;
             }
             for (Table table : job.getTablesUsed()) {
                 if (AuthorizationUtil.isAuthorizedRead(user, table)) {
+                   log.info("job iteration in api/queryresource ========= "+job.getUser());
                     filtered.add(new Job(
                             job.getUser(),
                             job.getQuery(),

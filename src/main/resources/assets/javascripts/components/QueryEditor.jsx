@@ -63,9 +63,6 @@ let QueryEditor = React.createClass({
     QueryStore.unlisten(this._hideModal);
     
   },
-      
-  
-
   render() {
     return (
       <div className="flex flex-initial flex-column">

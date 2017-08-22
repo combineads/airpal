@@ -9,6 +9,7 @@ class RunActions {
       'addQuery',
       'addRun',
       'connect',
+      'addFetch',
       'disconnect',
       'handleConnectionError',
       'handleConnectionOpen',
@@ -20,7 +21,7 @@ class RunActions {
 
   fetchHistory() {
     RunApiUtils.fetchHistory().then((results) => {
-      this.actions.addMultipleRuns(results);
+      this.actions.addFetch(results);
     }).catch(logError);
   }
 
