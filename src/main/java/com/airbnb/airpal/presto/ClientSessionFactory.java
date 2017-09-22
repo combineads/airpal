@@ -1,19 +1,19 @@
 package com.airbnb.airpal.presto;
 
-import com.facebook.presto.client.ClientSession;
-import com.google.common.collect.ImmutableMap;
-import io.airlift.units.Duration;
-
-import javax.inject.Provider;
+import static com.google.common.base.MoreObjects.firstNonNull;
+import static io.airlift.units.Duration.succinctDuration;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 import java.net.URI;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
-import static com.google.common.base.MoreObjects.firstNonNull;
-import static io.airlift.units.Duration.succinctDuration;
-import static java.util.concurrent.TimeUnit.MINUTES;
+import javax.inject.Provider;
+
+import com.facebook.presto.client.ClientSession;
+import com.google.common.collect.ImmutableMap;
+
+import io.airlift.units.Duration;
 
 public class ClientSessionFactory
 {
@@ -45,6 +45,7 @@ public class ClientSessionFactory
         return new ClientSession(server.get(),
                 user,
                 source,
+                "airpal",
                 catalog,
                 schema,
                 timeZoneId,
@@ -61,6 +62,7 @@ public class ClientSessionFactory
         return new ClientSession(server.get(),
                 user,
                 source,
+                "airpal",
                 catalog,
                 schema,
                 timeZoneId,
@@ -77,6 +79,7 @@ public class ClientSessionFactory
         return new ClientSession(server.get(),
                 user,
                 source,
+                "airpal",
                 catalog,
                 defaultSchema,
                 timeZoneId,

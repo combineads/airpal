@@ -1,5 +1,22 @@
 package com.airbnb.airpal.core.execution;
 
+import static java.lang.String.format;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Nullable;
+
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+
 import com.airbnb.airpal.api.Job;
 import com.airbnb.airpal.api.JobState;
 import com.airbnb.airpal.api.event.JobUpdateEvent;
@@ -9,8 +26,10 @@ import com.airbnb.airpal.api.output.builders.JobOutputBuilder;
 import com.airbnb.airpal.api.output.builders.OutputBuilderFactory;
 import com.airbnb.airpal.api.output.persistors.Persistor;
 import com.airbnb.airpal.api.output.persistors.PersistorFactory;
+import com.airbnb.airpal.core.execution.ExecutionClient.ExecutionFailureException;
 import com.airbnb.airpal.core.execution.QueryClient.QueryTimeOutException;
 import com.airbnb.airpal.presto.QueryInfoClient;
+import com.airbnb.airpal.presto.QueryInfoClient.BasicQueryInfo;
 import com.airbnb.airpal.presto.QueryRunner;
 import com.airbnb.airpal.presto.Table;
 import com.airbnb.airpal.presto.metadata.ColumnCache;
@@ -28,30 +47,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.eventbus.EventBus;
 import com.google.common.util.concurrent.RateLimiter;
+
 import io.airlift.units.DataSize;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 
-import javax.annotation.Nullable;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
-
-import static com.airbnb.airpal.core.execution.ExecutionClient.ExecutionFailureException;
-import static com.airbnb.airpal.presto.QueryInfoClient.BasicQueryInfo;
-import static java.lang.String.format;
-
-@Slf4j
 @RequiredArgsConstructor
 public class Execution implements Callable<Job>
 {
@@ -334,7 +334,8 @@ public class Execution implements Callable<Job>
                 zeroData,
                 0,
                 zeroData,
-                0
+                0,
+                ImmutableList.of()
         );
 
     }

@@ -11,7 +11,7 @@ plugins {
 }
 
 ext {
-    prestoVersion = "0.157"
+    prestoVersion = "0.170"
     if (System.properties['airpal.prestoVersion'] != null) {
         prestoVersion = System.properties['airpal.prestoVersion']
     }
@@ -79,7 +79,7 @@ dependencies {
     compile group: 'com.facebook.presto', name: 'presto-parser', version:prestoVersion
     compile group: 'com.hubspot.rosetta', name: 'RosettaJdbi', version:'2.1-SNAPSHOT'
     compile group: 'com.opencsv', name: 'opencsv', version:'3.2'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk', version:'1.10.6'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk', version:'1.11.200'
     compile group: 'org.apache.shiro', name: 'shiro-web', version:'1.2.4'
     compile group: 'org.apache.shiro', name: 'shiro-guice', version:'1.2.4'
     compile group: 'org.secnod.dropwizard', name: 'dropwizard-shiro', version:'0.2.0'

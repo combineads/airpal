@@ -28,3 +28,15 @@ src/main/resources/assets/build/*
 
 # Airpal configuration
 reference.yml
+/bin/
+.g2s2cli
+/.classpath
+/.project
+/.settings
+/velocity.log
+eclipse-bin
+var/
+codigo-generated-src/
+.cache
+build/
+build
