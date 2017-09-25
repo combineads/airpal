@@ -145,6 +145,8 @@ task buildTar(type: Tar) {
 shadowJar {
     transform(com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer)
     relocate 'org.slf4j', 'shaded.org.slf4j'
+    relocate 'com.fasterxml', 'shaded.com.fasterxml'
+    relocate 'com.google', 'shaded.com.google'
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
     exclude 'META-INF/LICENSE'
