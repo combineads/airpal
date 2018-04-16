@@ -94,7 +94,7 @@ public class PreviewTableCache
                 @Override
                 public Void apply(StatementClient client)
                 {
-                    QueryResults results = client.current();
+                    QueryResults results = (QueryResults) client.currentData();
                     if (results.getData() != null) {
                         cache.addAll(results.getData());
                     }

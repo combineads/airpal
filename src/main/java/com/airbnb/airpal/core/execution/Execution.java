@@ -138,7 +138,7 @@ public class Execution implements Callable<Job>
                         return null;
                     }
 
-                    QueryResults results = client.current();
+                    QueryResults results = (QueryResults) client.currentData();
                     List<Column> resultColumns = null;
                     JobState jobState = null;
                     QueryError queryError = null;
@@ -298,44 +298,6 @@ public class Execution implements Callable<Job>
 
     public static QueryStats createNoOpQueryStats()
     {
-        DateTime now = DateTime.now();
-        io.airlift.units.Duration zeroDuration = new io.airlift.units.Duration(0, TimeUnit.SECONDS);
-        DataSize zeroData = new DataSize(0, DataSize.Unit.BYTE);
-
-        return new QueryStats(
-                now,
-                null,
-                now,
-                now,
-                zeroDuration,
-                zeroDuration,
-                zeroDuration,
-                zeroDuration,
-                zeroDuration,
-                zeroDuration,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0.0,
-                zeroData,
-                zeroData,
-                zeroDuration,
-                zeroDuration,
-                zeroDuration,
-                zeroDuration,
-                false,
-                ImmutableSet.of(),
-                zeroData,
-                0,
-                zeroData,
-                0,
-                zeroData,
-                0
-        );
-
+        return new QueryStats();
     }
 }

@@ -26,15 +26,7 @@ import com.airbnb.airpal.presto.QueryInfoClient.BasicQueryInfo;
 import com.airbnb.airpal.presto.metadata.ColumnCache;
 import com.airbnb.airpal.presto.metadata.PreviewTableCache;
 import com.airbnb.airpal.presto.metadata.SchemaCache;
-import com.airbnb.airpal.resources.ExecuteResource;
-import com.airbnb.airpal.resources.FilesResource;
-import com.airbnb.airpal.resources.HealthResource;
-import com.airbnb.airpal.resources.PingResource;
-import com.airbnb.airpal.resources.QueryResource;
-import com.airbnb.airpal.resources.ResultsPreviewResource;
-import com.airbnb.airpal.resources.S3FilesResource;
-import com.airbnb.airpal.resources.SessionResource;
-import com.airbnb.airpal.resources.TablesResource;
+import com.airbnb.airpal.resources.*;
 import com.airbnb.airpal.resources.sse.SSEEventSourceServlet;
 import com.airbnb.airpal.sql.DbType;
 import com.airbnb.airpal.sql.beans.TableRow;
@@ -52,11 +44,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
-import com.google.inject.AbstractModule;
-import com.google.inject.Provider;
-import com.google.inject.Provides;
-import com.google.inject.Scopes;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import com.google.inject.name.Names;
 import io.airlift.configuration.ConfigDefaults;
 import io.airlift.configuration.ConfigurationFactory;
@@ -67,12 +55,12 @@ import io.airlift.units.Duration;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
 import org.apache.shiro.web.env.EnvironmentLoaderListener;
 import org.skife.jdbi.v2.DBI;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
-import javax.validation.constraints.Null;
 import java.net.URI;
 import java.util.Collections;
 import java.util.concurrent.ExecutorService;
@@ -198,7 +186,7 @@ public class AirpalModule extends AbstractModule
 
     @Provides
     public QueryRunnerFactory provideQueryRunner(ClientSessionFactory sessionFactory,
-            @ForQueryRunner HttpClient httpClient)
+            @ForQueryRunner OkHttpClient httpClient)
     {
         return new QueryRunnerFactory(sessionFactory, httpClient);
     }

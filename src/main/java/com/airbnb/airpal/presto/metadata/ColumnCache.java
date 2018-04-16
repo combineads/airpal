@@ -93,7 +93,7 @@ public class ColumnCache
                 @Override
                 public Void apply(StatementClient client)
                 {
-                    QueryResults results = client.current();
+                    QueryResults results = (QueryResults) client.currentData();
                     if (results.getData() != null && results.getColumns() != null) {
                         final List<Column> columns = results.getColumns();
 
@@ -136,7 +136,7 @@ public class ColumnCache
                 @Override
                 public Void apply(StatementClient client)
                 {
-                    QueryResults results = client.current();
+                    QueryResults results = (QueryResults) client.currentData();
                     if (results.getData() != null) {
                         for (List<Object> row : results.getData()) {
                             Column column = new Column((String) row.get(0), (String) row.get(1), new ClientTypeSignature(TypeSignature.parseTypeSignature((String)row.get(1))));
