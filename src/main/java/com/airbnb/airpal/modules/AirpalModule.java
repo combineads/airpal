@@ -332,7 +332,7 @@ public class AirpalModule extends AbstractModule {
 	@Provides
 	@Singleton
 	public ExpiringFileStore provideExpiringFileStore() {
-		return new ExpiringFileStore(new DataSize(100, DataSize.Unit.MEGABYTE));
+		return new ExpiringFileStore(new DataSize(10, DataSize.Unit.GIGABYTE));
 	}
 
 	@Provides

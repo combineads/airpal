@@ -37,7 +37,7 @@ public class AllowAllFilter
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception
     {
         log.info("createToken called");
-        return new AllowAllToken(request.getRemoteHost(), true, "anonymous", ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
+        return new AllowAllToken(request.getRemoteHost(), true, "bigdata", ImmutableSet.of("all"), "default", Duration.standardHours(1), "default");
     }
 
     @Override
