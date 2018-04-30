@@ -141,7 +141,7 @@ public class ColumnCache
                         for (List<Object> row : results.getData()) {
                             Column column = new Column((String) row.get(0), (String) row.get(1), new ClientTypeSignature(TypeSignature.parseTypeSignature((String)row.get(1))));
                             boolean isNullable = false;// (Boolean) row.get(2);
-                            boolean isPartition = "Partition Key".equals(row.get(2));
+                            boolean isPartition = "Partition Key".equalsIgnoreCase(row.get(2).toString());
 
                             cache.add(HiveColumn.fromColumn(column, isNullable, isPartition));
                         }
